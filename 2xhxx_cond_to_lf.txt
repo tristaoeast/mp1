@@ -1,0 +1,6 @@
+0	1	2	vinte
+1	2	0	eps
+1	2	1	uma
+1	2	2	duas
+1	2	3	tres
+2

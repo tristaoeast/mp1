@@ -1,0 +1,12 @@
+0	1	0	eps
+1	2	0	zero
+1	2	1	uma
+1	2	2	duas
+1	2	3	tres
+1	2	4	quatro
+1	2	5	cinco
+1	2	6	seis
+1	2	7	sete
+1	2	8	oito
+1	2	9	nove
+2

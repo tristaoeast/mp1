@@ -1,8 +1,0 @@
-0	1	eps	1
-
-1	5	onze	1
-1	5	doze	2
-0	3	vinte	2
-3	5	duas	2
-3	5	uma	1
-5
