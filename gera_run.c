@@ -138,7 +138,6 @@ void gen_input_txt_cond(char *inputs) {
 				for (ptr = old_title; *ptr != '\0'; ptr++) {
 					printf("%c\n", *ptr);
 					fprintf(fp_txt, "%d\t%d\t%c\t%c\n", state, state + 1, *ptr, *ptr);
-					// fprintf(fp_txt, "trollllll\n");
 					state++;
 				}
 				fprintf(fp_txt, "%d", state);
