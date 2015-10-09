@@ -42,7 +42,6 @@ void test_transd_cond(FILE *fp, char * inputs) {
 	{
 		char* title = (char *) malloc (sizeof(char) * 6);
 		while (fscanf(fp_inputs, "%s", title) != EOF) {
-			// printf("Line: %s\n", title);
 
 			fprintf(fp, "fstcompose 1-inputs_condensados/%s.fst cond_to_lf.fst > 1-outputs_lf/%s_lf.fst\n", title, title);
 			fprintf(fp, "fstdraw --isymbols=data.sym --osymbols=data.sym  1-outputs_lf/%s_lf.fst | dot -Tpdf > 1-outputs_lf/%s_lf.pdf\n\n", title, title);
@@ -58,7 +57,6 @@ void test_transd_lf(FILE *fp, char * inputs) {
 	{
 		char* title = (char *) malloc (sizeof(char) * 6);
 		while (fscanf(fp_inputs, "%s", title) != EOF) {
-			// printf("Line: %s\n", title);
 
 			fprintf(fp, "fstcompose 2-inputs_lf/%s.fst inverted_cond_to_lf.fst > 2-outputs_cond/%s_cond.fst\n", title, title);
 			fprintf(fp, "fstdraw --isymbols=data.sym --osymbols=data.sym  2-outputs_cond/%s_cond.fst | dot -Tpdf > 2-outputs_cond/%s_cond.pdf\n\n", title, title);
@@ -80,17 +78,12 @@ void gen_input_txt_lf(char *inputs) {
 			char ext[8];
 			strcpy(ext, ".txt");
 			strcat(title, ext);
-			// printf("Title: %s\n", title);
 			char dir[64];
 			strcpy(dir, "2-inputs_lf");
-			// printf("Dir: %s\n", dir);
 			char filename[256];
 			strcpy(filename, dir);
-			// printf("Filename: %s\n", filename);
 			strcat(filename, "/");
-			// printf("Filename: %s\n", filename);
 			strcat(filename, title);
-			// printf("Filename: %s\n", filename);
 
 			if ( access( filename, F_OK ) != -1 );
 			else {
@@ -99,7 +92,6 @@ void gen_input_txt_lf(char *inputs) {
 				int state = 0;
 				const char s[2] = "_";
 				char *token;
-				// printf("old_title: %s\n", old_title);
 				/* get the first token */
 				token = strtok(old_title, s);
 
@@ -129,17 +121,12 @@ void gen_input_txt_cond(char *inputs) {
 			char ext[8];
 			strcpy(ext, ".txt");
 			strcat(title, ext);
-			// printf("Title: %s\n", title);
 			char dir[64];
 			strcpy(dir, "1-inputs_condensados");
-			// printf("Dir: %s\n", dir);
 			char filename[256];
 			strcpy(filename, dir);
-			// printf("Filename: %s\n", filename);
 			strcat(filename, "/");
-			// printf("Filename: %s\n", filename);
 			strcat(filename, title);
-			// printf("Filename: %s\n", filename);
 
 			if ( access( filename, F_OK ) != -1 );
 			else {
@@ -166,22 +153,7 @@ void compile_transd(FILE *fp, char * filename) {
 	if (fp != NULL && fp_inputs != NULL)
 	{
 		char* line = (char *) malloc (sizeof(char) * 512);
-		char* str = (char *) malloc (sizeof(char) * 32);
-		// while (fscanf(fp_inputs, "%s", str) != EOF) {
-		// 	printf("2\n");
-		// 	strcpy(line, str);
-		// 	printf("3\n");
-		// 	while (fscanf(fp_inputs, "%s", str) != '\n') {
-		// 		printf("Line: %s\nStr: %s\n", line,str);
-		// 		strcat(line, " ");
-		// 		strcat(line, str);
-		// 		printf("5\n");
-		// 		// fprintf(fp, "%s\n",line);
-		// 	}
-		// 	printf("6\n");
-		// 	printf("Line: %s\n", line);
 
-		// }
 		while (fgets(line, sizeof(line), fp_inputs)) {
 			/* note that fgets don't strip the terminating \n, checking its
 			   presence would allow to handle lines longer that sizeof(line) */
@@ -206,6 +178,11 @@ int main(int argc, char* argv[])
 		printf("Error opening file!\n");
 		exit(1);
 	}
+
+	gen_input_txt_lf(inputs_lf_filename);
+	gen_input_txt_cond(inputs_cond_filename);
+
+
 	fprintf(f, "#!/bin/bash\n\n");
 	fprintf(f, "./clean.sh\n\n\n");
 
@@ -226,25 +203,8 @@ int main(int argc, char* argv[])
 	fprintf(f, "\n#2\n");
 	test_transd_lf(f, inputs_lf_filename);
 
-	gen_input_txt_lf(inputs_lf_filename);
-	gen_input_txt_cond(inputs_cond_filename);
 
 
-
-
-	// char const* const fileName = argv[1]; /* should check that argc > 1 */
-	// FILE* file = fopen(fileName, "r"); /* should check the result */
-	// char line[256];
-
-	// while (fgets(line, sizeof(line), file)) {
-	/* note that fgets don't strip the terminating \n, checking its
-	   presence would allow to handle lines longer that sizeof(line) */
-	// printf("%s", line);
-	// }
-	/* may check feof here to make a difference between eof and io failure -- network
-	   timeout for instance */
-
-	// fclose(file);
 	fclose(f);
 
 	return 0;

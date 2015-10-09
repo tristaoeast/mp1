@@ -1,3 +1,0 @@
-0	1	vinte	vinte
-1	2	duas	duas
-2

@@ -1,0 +1,10 @@
+Como gerar ficheiros de input e respetivo script para compilar/compor/desenhar/testar os transdutores com os respetivos inputs:
+
+1. Alterar o ficheiro lista_inputs_condensados.txt com as horas em formato condensado que pretendam que sejam testadas com o transdutor (ver exemplos já presentes).
+
+2. Alterar o ficheiro lista_inputs_lf.txt com as horas em formato de língua falada que pretendam que sejam testadas com o transdutor (ver exemplos já presentes).
+
+3. Correr o programa gera_run normalmente - $ ./gera_run . O que este programa faz é pegar em cada uma das listas, gerar o ficheiro de input com a respetiva máquina de estados para cada uma das entradas presentas em cada uma das listas, na respetiva subdiretoria (1-inputs_cond para as horas em formato condensado e 2-inputs_lf para as horas em formato de língua falada). Em seguida, gera o script (run.sh) que compila/comp~oe/desenha/testa os transdutores "intermédios" e finais (cond_to_lf.fst e inverted_cond_to_lf.fst) presentes na diretoria principal (mp1) com os ficheiros de input gerados anteriormente pelo programa gera_run.
+
+Nota: i. O çodigo fonte gera_run.c pode ser compilado com - $ gcc gera_run.c -o gera_run - por exemplo.
+	  ii. Para limpar das diretorias os ficheiros gerados pelo script run.sh basta correr o script clean.sh

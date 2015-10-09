@@ -1,16 +1,12 @@
 #!/bin/bash
 
-# rm -f *.pdf *.fst
-# rm -f 1-inputs_condensados/*.fst 1-inputs_condensados/*.pdf
-# rm -f 1-outputs_lf/*.fst 1-outputs_lf/*.pdf
-# rm -f 2-inputs_lf/*.fst 2-inputs_lf/*.pdf
-# rm -f 2-outputs_cond/*.fst 2-outputs_cond/*.pdf
-
 ./clean.sh
+
 
 ################### letras ################
 #
 # Compila e gera a versão gráfica dos inputs
+#
 
 #1
 fstcompile --isymbols=data.sym --osymbols=data.sym 1-inputs_condensados/00:00.txt > 1-inputs_condensados/00:00.fst
@@ -144,9 +140,6 @@ fstdraw --isymbols=data.sym --osymbols=data.sym 2-inputs_lf/vinte_e_cinquenta.fs
 fstcompile --isymbols=data.sym --osymbols=data.sym 2-inputs_lf/vinte_uma_e_cinquenta_quatro.txt > 2-inputs_lf/vinte_uma_e_cinquenta_quatro.fst
 fstdraw --isymbols=data.sym --osymbols=data.sym 2-inputs_lf/vinte_uma_e_cinquenta_quatro.fst | dot -Tpdf > 2-inputs_lf/vinte_uma_e_cinquenta_quatro.pdf
 
-
-
-
 ################### Transdutores de conversão ################
 #
 # Compila e gera a versão gráfica dos transdutores que convertem as horas de um formato para o outro
@@ -218,7 +211,6 @@ fstdraw --isymbols=data.sym --osymbols=data.sym cond_to_lf.fst | dot -Tpdf > con
 #2
 fstinvert cond_to_lf.fst > inverted_cond_to_lf.fst
 fstdraw --isymbols=data.sym --osymbols=data.sym inverted_cond_to_lf.fst | dot -Tpdf > inverted_cond_to_lf.pdf
-
 ################### Testa os transdutores ################
 #
 # Compila e gera a versão gráfica do transdutor que traduz Inglês em Português
@@ -354,3 +346,4 @@ fstdraw --isymbols=data.sym --osymbols=data.sym  2-outputs_cond/vinte_e_cinquent
 
 fstcompose 2-inputs_lf/vinte_uma_e_cinquenta_quatro.fst inverted_cond_to_lf.fst > 2-outputs_cond/vinte_uma_e_cinquenta_quatro_cond.fst
 fstdraw --isymbols=data.sym --osymbols=data.sym  2-outputs_cond/vinte_uma_e_cinquenta_quatro_cond.fst | dot -Tpdf > 2-outputs_cond/vinte_uma_e_cinquenta_quatro_cond.pdf
+
