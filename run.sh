@@ -209,8 +209,12 @@ fstdraw --isymbols=data.sym --osymbols=data.sym  minutos_cond_to_lf.fst | dot -T
 
 # Final
 #1
-fstconcat horas_cond_to_lf.fst minutos_cond_to_lf.fst > cond_to_lf.fst
+fstconcat horas_cond_to_lf.fst minutos_cond_to_lf.fst > temp_cond_to_lf.fst
+fstdraw --isymbols=data.sym --osymbols=data.sym temp_cond_to_lf.fst | dot -Tpdf > temp_cond_to_lf.pdf
+
+fstrmepsilon temp_cond_to_lf.fst > cond_to_lf.fst
 fstdraw --isymbols=data.sym --osymbols=data.sym cond_to_lf.fst | dot -Tpdf > cond_to_lf.pdf
+
 #2
 fstinvert cond_to_lf.fst > inverted_cond_to_lf.fst
 fstdraw --isymbols=data.sym --osymbols=data.sym inverted_cond_to_lf.fst | dot -Tpdf > inverted_cond_to_lf.pdf

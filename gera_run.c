@@ -16,6 +16,7 @@ void compile_draw_inputs_cond(FILE *fp, char * inputs) {
 		}
 
 	}
+	fclose(fp_inputs);
 }
 
 void compile_draw_inputs_lf(FILE *fp, char * inputs) {
@@ -31,6 +32,7 @@ void compile_draw_inputs_lf(FILE *fp, char * inputs) {
 		}
 
 	}
+	fclose(fp_inputs);
 }
 
 void test_transd_cond(FILE *fp, char * inputs) {
@@ -46,6 +48,7 @@ void test_transd_cond(FILE *fp, char * inputs) {
 		}
 
 	}
+	fclose(fp_inputs);
 }
 
 void test_transd_lf(FILE *fp, char * inputs) {
@@ -61,6 +64,7 @@ void test_transd_lf(FILE *fp, char * inputs) {
 		}
 
 	}
+	fclose(fp_inputs);
 }
 
 
@@ -106,7 +110,39 @@ void gen_input_txt_lf(char *inputs) {
 			fprintf(fp_txt, "%d", state);
 		}
 	}
+	fclose(fp_inputs);
+}
 
+void compile_transd(FILE *fp, char * filename) {
+	FILE *fp_inputs = fopen(filename, "r");
+	if (fp != NULL && fp_inputs != NULL)
+	{
+		char* line = (char *) malloc (sizeof(char) * 512);
+		char* str = (char *) malloc (sizeof(char) * 32);
+		printf("1\n");
+		// while (fscanf(fp_inputs, "%s", str) != EOF) {
+		// 	printf("2\n");
+		// 	strcpy(line, str);
+		// 	printf("3\n");
+		// 	while (fscanf(fp_inputs, "%s", str) != '\n') {
+		// 		printf("Line: %s\nStr: %s\n", line,str);
+		// 		strcat(line, " ");
+		// 		strcat(line, str);
+		// 		printf("5\n");
+		// 		// fprintf(fp, "%s\n",line);
+		// 	}
+		// 	printf("6\n");
+		// 	printf("Line: %s\n", line);
+
+		// }
+		while (fgets(line, sizeof(line), fp_inputs)) {
+			/* note that fgets don't strip the terminating \n, checking its
+			   presence would allow to handle lines longer that sizeof(line) */
+			fprintf(fp, "%s", line);
+		}
+		fprintf(fp, "\n");
+	}
+	fclose(fp_inputs);
 }
 
 
@@ -115,33 +151,33 @@ int main(int argc, char* argv[])
 {
 	char inputs_cond_filename[64] = "lista_inputs_condensados.txt";
 	char inputs_lf_filename[64] = "lista_inputs_lf.txt";
+	char compile_transd_filename[64] = "compile_transd.sh";
 
-	// FILE *f = fopen("test.sh", "w");
-	// if (f == NULL)
-	// {
-	// 	printf("Error opening file!\n");
-	// 	exit(1);
-	// }
-	// fprintf(f, "#!/bin/bash\n\n");
-	// fprintf(f, "rm -f *.pdf *.fst\n");
-	// fprintf(f, "rm -f 1-inputs_condensados/*.fst 1-inputs_condensados/*.pdf\n");
-	// fprintf(f, "rm -f 1-outputs_lf/*.fst 1-outputs_lf/*.pdf\n");
-	// fprintf(f, "rm -f 2-inputs_lf/*.fst 2-inputs_lf/*.pdf\n");
-	// fprintf(f, "rm -f 2-outputs_cond/*.fst 2-outputs_cond/*.pdf\n\n\n");
+	FILE *f = fopen("test.sh", "w");
+	if (f == NULL)
+	{
+		printf("Error opening file!\n");
+		exit(1);
+	}
+	fprintf(f, "#!/bin/bash\n\n");
+	fprintf(f, "./clean.sh\n\n\n");
 
-	// fprintf(f, "################### letras ################\n#\n# Compila e gera a versão gráfica dos inputs\n#\n\n");
+	fprintf(f, "################### letras ################\n#\n# Compila e gera a versão gráfica dos inputs\n#\n\n");
 
-	// fprintf(f, "#1\n");
-	// compile_draw_inputs_cond(f, inputs_cond_filename);
+	fprintf(f, "#1\n");
+	compile_draw_inputs_cond(f, inputs_cond_filename);
 
-	// fprintf(f, "\n#2\n");
-	// compile_draw_inputs_lf(f, inputs_lf_filename);
+	fprintf(f, "\n#2\n");
+	compile_draw_inputs_lf(f, inputs_lf_filename);
 
-	// fprintf(f, "################### Testa os transdutores ################\n#\n# Compila e gera a versão gráfica do transdutor que traduz Inglês em Português\n" );
-	// fprintf(f, "\n#1\n");
-	// test_transd_cond(f, inputs_cond_filename);
-	// fprintf(f, "\n#2\n");
-	// test_transd_lf(f, inputs_lf_filename);
+	// fprintf(f, "################### Transdutores de conversão ################\n#\n# Compila e gera a versão gráfica dos transdutores que convertem as horas de um formato para o outro\nfstcompile  --isymbols=data.sym --osymbols=data.sym  0xhxx_cond_to_lf.txt > 0xhxx_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  0xhxx_cond_to_lf.fst | dot -Tpdf > 0xhxx_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  1xhxx_cond_to_lf.txt > 1xhxx_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  1xhxx_cond_to_lf.fst | dot -Tpdf > 1xhxx_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  2xhxx_cond_to_lf.txt > 2xhxx_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  2xhxx_cond_to_lf.fst | dot -Tpdf > 2xhxx_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  e_cond_to_lf.txt > e_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  e_cond_to_lf.fst | dot -Tpdf > e_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  xxh0x_cond_to_lf.txt > xxh0x_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  xxh0x_cond_to_lf.fst | dot -Tpdf > xxh0x_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  xxh1x_cond_to_lf.txt > xxh1x_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  xxh1x_cond_to_lf.fst | dot -Tpdf > xxh1x_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  xxh30_cond_to_lf.txt > xxh30_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  xxh30_cond_to_lf.fst | dot -Tpdf > xxh30_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  xxh45_cond_to_lf.txt > xxh45_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  xxh45_cond_to_lf.fst | dot -Tpdf > xxh45_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  xxhx0-9_cond_to_lf.txt > xxhx0-9_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  xxhx0-9_cond_to_lf.fst | dot -Tpdf > xxhx0-9_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  xxh00_cond_to_lf.txt > xxh00_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  xxh00_cond_to_lf.fst | dot -Tpdf > xxh00_cond_to_lf.pdf\n\nfstcompile  --isymbols=data.sym --osymbols=data.sym  xxh2345x_cond_to_lf.txt > xxh2345x_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  xxh2345x_cond_to_lf.fst | dot -Tpdf > xxh2345x_cond_to_lf.pdf\n\n\n# Horas\nfstunion 0xhxx_cond_to_lf.fst 1xhxx_cond_to_lf.fst > hunion1_cond_to_lf.fst\nfstunion hunion1_cond_to_lf.fst 2xhxx_cond_to_lf.fst > horas_cond_to_lf.fst\n\nfstdraw --isymbols=data.sym --osymbols=data.sym horas_cond_to_lf.fst | dot -Tpdf > horas_cond_to_lf.pdf\n\n\n# Minutos\nfstconcat xxh2345x_cond_to_lf.fst xxhx0-9_cond_to_lf.fst > xxh23450-9_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  xxh23450-9_cond_to_lf.fst | dot -Tpdf > xxh23450-9_cond_to_lf.pdf\n\nfstunion xxh23450-9_cond_to_lf.fst xxh0x_cond_to_lf.fst > munion1_cond_to_lf.fst\nfstunion munion1_cond_to_lf.fst xxh1x_cond_to_lf.fst > munion2_cond_to_lf.fst\nfstunion munion2_cond_to_lf.fst xxh30_cond_to_lf.fst > munion3_cond_to_lf.fst\nfstunion munion3_cond_to_lf.fst xxh45_cond_to_lf.fst > munion4_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  munion4_cond_to_lf.fst | dot -Tpdf > munion4_cond_to_lf.pdf\n\n\n# e\nfstconcat e_cond_to_lf.fst munion4_cond_to_lf.fst > eunion1_cond_to_lf.fst\nfstunion eunion1_cond_to_lf.fst xxh00_cond_to_lf.fst > minutos_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym  minutos_cond_to_lf.fst | dot -Tpdf > minutos_cond_to_lf.pdf\n\n# Final\n#1\nfstconcat horas_cond_to_lf.fst minutos_cond_to_lf.fst > temp_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym temp_cond_to_lf.fst | dot -Tpdf > temp_cond_to_lf.pdf\n\nfstrmepsilon temp_cond_to_lf.fst > cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym cond_to_lf.fst | dot -Tpdf > cond_to_lf.pdf\n\n#2\nfstinvert cond_to_lf.fst > inverted_cond_to_lf.fst\nfstdraw --isymbols=data.sym --osymbols=data.sym inverted_cond_to_lf.fst | dot -Tpdf > inverted_cond_to_lf.pdf\n");
+	compile_transd(f, compile_transd_filename);
+
+	fprintf(f, "################### Testa os transdutores ################\n#\n# Compila e gera a versão gráfica do transdutor que traduz Inglês em Português\n" );
+	fprintf(f, "\n#1\n");
+	test_transd_cond(f, inputs_cond_filename);
+	fprintf(f, "\n#2\n");
+	test_transd_lf(f, inputs_lf_filename);
 
 	gen_input_txt_lf(inputs_lf_filename);
 
@@ -161,6 +197,7 @@ int main(int argc, char* argv[])
 	   timeout for instance */
 
 	// fclose(file);
+	fclose(f);
 
 	return 0;
 }
