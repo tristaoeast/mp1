@@ -1,0 +1,4 @@
+0	1	uma	uma
+1	2	e	e
+2	3	quarenta	quarenta
+3

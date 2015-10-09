@@ -1,0 +1,4 @@
+0	1	zero	zero
+1	2	e	e
+2	3	um	um
+3

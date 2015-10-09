@@ -1,0 +1,6 @@
+0	1	meio	meio
+1	2	dia	dia
+2	3	e	e
+3	4	quarenta	quarenta
+4	5	tres	tres
+5

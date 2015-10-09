@@ -1,0 +1,4 @@
+0	1	dezassete	dezassete
+1	2	e	e
+2	3	vinte	vinte
+3

@@ -1,0 +1,3 @@
+0	1	meio	meio
+1	2	dia	dia
+2
