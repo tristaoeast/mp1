@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 
 void compile_draw_inputs_cond(FILE *fp, char * inputs) {
@@ -90,24 +91,71 @@ void gen_input_txt_lf(char *inputs) {
 			// printf("Filename: %s\n", filename);
 			strcat(filename, title);
 			// printf("Filename: %s\n", filename);
-			FILE *fp_txt = fopen(filename, "w");
 
-			int state = 0;
-			const char s[2] = "_";
-			char *token;
-			// printf("old_title: %s\n", old_title);
-			/* get the first token */
-			token = strtok(old_title, s);
+			if ( access( filename, F_OK ) != -1 );
+			else {
+				FILE *fp_txt = fopen(filename, "w");
 
-			/* walk through other tokens */
-			while ( token != NULL )
-			{
+				int state = 0;
+				const char s[2] = "_";
+				char *token;
+				// printf("old_title: %s\n", old_title);
+				/* get the first token */
+				token = strtok(old_title, s);
 
-				fprintf(fp_txt, "%d\t%d\t%s\t%s\n", state, state + 1, token, token);
-				state++;
-				token = strtok(NULL, s);
+				/* walk through other tokens */
+				while ( token != NULL )
+				{
+
+					fprintf(fp_txt, "%d\t%d\t%s\t%s\n", state, state + 1, token, token);
+					state++;
+					token = strtok(NULL, s);
+				}
+				fprintf(fp_txt, "%d", state);
 			}
-			fprintf(fp_txt, "%d", state);
+		}
+	}
+	fclose(fp_inputs);
+}
+
+void gen_input_txt_cond(char *inputs) {
+	FILE *fp_inputs = fopen(inputs, "r");
+	if (fp_inputs != NULL)
+	{
+		char* title = (char *) malloc (sizeof(char) * 16);
+		while (fscanf(fp_inputs, "%s", title) != EOF) {
+			char *old_title = (char *) malloc (sizeof(char) * 8);
+			strcpy(old_title, title);
+			char ext[8];
+			strcpy(ext, ".txt");
+			strcat(title, ext);
+			// printf("Title: %s\n", title);
+			char dir[64];
+			strcpy(dir, "1-inputs_condensados");
+			// printf("Dir: %s\n", dir);
+			char filename[256];
+			strcpy(filename, dir);
+			// printf("Filename: %s\n", filename);
+			strcat(filename, "/");
+			// printf("Filename: %s\n", filename);
+			strcat(filename, title);
+			// printf("Filename: %s\n", filename);
+
+			if ( access( filename, F_OK ) != -1 );
+			else {
+				FILE *fp_txt = fopen(filename, "w");
+
+				int state = 0;
+				int i;
+				char* ptr = old_title;
+				for (ptr = old_title; *ptr != '\0'; ptr++) {
+					printf("%c\n", *ptr);
+					fprintf(fp_txt, "%d\t%d\t%c\t%c\n", state, state + 1, *ptr, *ptr);
+					// fprintf(fp_txt, "trollllll\n");
+					state++;
+				}
+				fprintf(fp_txt, "%d", state);
+			}
 		}
 	}
 	fclose(fp_inputs);
@@ -119,7 +167,6 @@ void compile_transd(FILE *fp, char * filename) {
 	{
 		char* line = (char *) malloc (sizeof(char) * 512);
 		char* str = (char *) malloc (sizeof(char) * 32);
-		printf("1\n");
 		// while (fscanf(fp_inputs, "%s", str) != EOF) {
 		// 	printf("2\n");
 		// 	strcpy(line, str);
@@ -153,7 +200,7 @@ int main(int argc, char* argv[])
 	char inputs_lf_filename[64] = "lista_inputs_lf.txt";
 	char compile_transd_filename[64] = "compile_transd.sh";
 
-	FILE *f = fopen("test.sh", "w");
+	FILE *f = fopen("run.sh", "w");
 	if (f == NULL)
 	{
 		printf("Error opening file!\n");
@@ -180,6 +227,7 @@ int main(int argc, char* argv[])
 	test_transd_lf(f, inputs_lf_filename);
 
 	gen_input_txt_lf(inputs_lf_filename);
+	gen_input_txt_cond(inputs_cond_filename);
 
 
 
