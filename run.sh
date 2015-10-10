@@ -214,7 +214,6 @@ fstinvert cond_to_lf.fst > inverted_cond_to_lf.fst
 fstdraw --isymbols=data.sym --osymbols=data.sym inverted_cond_to_lf.fst | dot -Tpdf > inverted_cond_to_lf.pdf
 ################### Testa os transdutores ################
 #
-# Compila e gera a versão gráfica do transdutor que traduz Inglês em Português
 
 #1
 fstcompose 1-inputs_condensados/00:00.fst cond_to_lf.fst > 1-outputs_lf/00:00_lf.fst
