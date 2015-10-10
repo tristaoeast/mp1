@@ -1,13 +1,13 @@
 Relativamente o ponto 1 optámos por simplificar a nossa solução ao separar a elaboração de um transdutor para a parte das horas e outro para a parte dos minutos, e depois repartir cada um nos vários casos diferentes detetados. Na elaboração do transdutor final foram utilizadas diversas operações para a junção dos vários transdutores.
 Começando pelo das horas, o transdutor final é elaborado fazendo uma união dos seguintes três transdutores:
 Transdutor 0xhxx – Caso em que as horas se encontram entre 0 e 9
-Transdutor 1xhxx – Caso em que as horas se encontram entre 10 e 19. Aqui, para produzir o output "meio dia", optámos por introduzir mais um estado(3), com input eps, em vez de introduzir uma nova transiç~ao (entre 0 e 1) com output "meio" e depois a transiç~ao (entre 1 e 2) com input "2" e output "dia", o que iria fazer com que todos os inputs com horas no formato 1x:xx percorressem esse caminho, para serem rejeitadas (quando chegassem `a transiç~ao entre o estado 1 e 2).
+Transdutor 1xhxx – Caso em que as horas se encontram entre 10 e 19. Aqui, para produzir o output "meio dia", optámos por introduzir mais um estado(3), com input eps, em vez de introduzir uma nova transição (entre 0 e 1) com output "meio" e depois a transição (entre 1 e 2) com input "2" e output "dia", o que iria fazer com que todos os inputs com horas no formato 1x:xx percorressem esse caminho, para serem rejeitadas (quando chegassem `a transiç~ao entre o estado 1 e 2).
 Transdutor 2xhxx – Caso em que as horas se encontram entre as 20 e 23
 De seguida, para a elaboração do transdutor final dos minutos diversas operações foram realizadas consoantes os diversos casos existentes. Vamos primeiro perceber quais os transdutores elaborados:
 Transdutor e – Transdutor que é responsável pela inserção de um “e” no output 
 Transdutor xxh00 – Caso em que não é preciso apresentação de minutos
 Transdutor xxh0x – Caso em que os minutos se encontram entre 1 e 9
-Transdutor xxh1x – Caso em que os minutos se encontram entre 10 e 19. Aqui, para produzir o output "um quarto" procedemos de forma semelhante e pelas mesmoas raz~oes que no output "meio dia" descrito mais acima (ver Transdutor 1xhxx).
+Transdutor xxh1x – Caso em que os minutos se encontram entre 10 e 19. Aqui, para produzir o output "um quarto" procedemos de forma semelhante e pelas mesmoas razões que no output "meio dia" descrito mais acima (ver Transdutor 1xhxx).
 Transdutor xxh2345 – Concatenação entre o Transdutor xxh2345x com o Transdutor xxhx0-9, isto é, neste caso nos minutos existe um padrão comum que foi aproveitado
 Transdutor xxh30 – Caso do uso de meia para os minutos
 Transdutor xxh45 – Caso do uso de três quartos para os minutos
