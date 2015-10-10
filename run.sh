@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ./clean.sh
-
+mkdir 2-outputs_cond/
+mkdir 1-outputs_lf/
 
 ################### letras ################
 #
